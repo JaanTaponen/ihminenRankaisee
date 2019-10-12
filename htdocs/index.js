@@ -1,11 +1,11 @@
 import 'ol/ol.css';
-import Feature from './ol/Feature';
-import Map from './ol/Map';
-import View from './ol/View';
-import Point from './ol/geom/Point';
-import {Tile as TileLayer, Vector as VectorLayer} from './ol/layer';
-import {Cluster, OSM, Vector as VectorSource} from './ol/source';
-import {Circle as CircleStyle, Fill, Stroke, Style, Text} from './ol/style';
+import Feature from 'ol/Feature';
+import Map from 'ol/Map';
+import View from 'ol/View';
+import Point from 'ol/geom/Point';
+import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
+import {Cluster, OSM, Vector as VectorSource} from 'ol/source';
+import {Circle as CircleStyle, Fill, Stroke, Style, Text} from 'ol/style';
 
 
 var distance = document.getElementById('distance');
