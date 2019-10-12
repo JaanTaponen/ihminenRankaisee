@@ -3,11 +3,11 @@ import Feature from 'ol/Feature';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import Point from 'ol/geom/Point';
+import GeoJSON from 'ol/format/GeoJSON';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import {Cluster, OSM, Vector as VectorSource} from 'ol/source';
 import {Circle as CircleStyle, Fill, Stroke, Style, Text} from 'ol/style';
-
-/* For cluster generation */
+import {fromLonLat} from 'ol/proj';
 
 var distance = document.getElementById('distance');
 
@@ -39,10 +39,10 @@ var clusters = new VectorLayer({
         image: new CircleStyle({
           radius: 10,
           stroke: new Stroke({
-            color: '#fff'
+            color: '#eb34b4'
           }),
           fill: new Fill({
-            color: '#3399CC'
+            color: 'green'
           })
         }),
         text: new Text({
@@ -61,15 +61,19 @@ var clusters = new VectorLayer({
 var raster = new TileLayer({
   source: new OSM()
 });
-
+var mantsalaLocation = [25.320351,60.635681];
+const mantsala = fromLonLat(mantsalaLocation);
+console.log(mantsala)
 var map = new Map({
   layers: [raster, clusters],
   target: 'map',
   view: new View({
-    center: [0, 0],
-    zoom: 2
+    center: mantsala,
+    zoom: 10
   })
+ 
 });
+
 
 distance.addEventListener('input', function() {
   clusterSource.setDistance(parseInt(distance.value, 10));
