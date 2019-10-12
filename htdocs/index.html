@@ -1,32 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Clustered sssFeatures</title>
-    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
-    <style>
-      .map {
-        width: 100%;
-        height:400px;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="map" class="map"></div>
-    <div id="info" style="display: none;"></div>
-    
-    <label for="track">
-      track position
-      <input id="track" type="checkbox"/>
-    </label>
-    <p>
-      position accuracy : <code id="accuracy"></code>&nbsp;&nbsp;
-      altitude : <code id="altitude"></code>&nbsp;&nbsp;
-      altitude accuracy : <code id="altitudeAccuracy"></code>&nbsp;&nbsp;
-      heading : <code id="heading"></code>&nbsp;&nbsp;
-      speed : <code id="speed"></code>
-    </p>
-    <script src="./cluster.js"></script>
-    <script src="./location.js"></script>
-  </body>
+
+<head>
+  <title>Clustered sssFeatures</title>
+  <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+  <script
+    src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+  <style>
+    .map {
+      width: 100%;
+      height: 400px;
+    }
+
+    .newCard {
+      width: 10%;
+      height: 50%;
+      position: absolute;
+      left: 0%;
+      top: 10%;
+      background-color: aquamarine;
+      z-index: 10;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="master"></div>
+  <div id="map" class="map"></div>
+  <div id="info" style="display: none;"></div>
+
+  <label for="track">
+    track position
+    <input id="track" type="checkbox" />
+  </label>
+  <p>
+    position accuracy : <code id="accuracy"></code>&nbsp;&nbsp;
+    altitude : <code id="altitude"></code>&nbsp;&nbsp;
+    altitude accuracy : <code id="altitudeAccuracy"></code>&nbsp;&nbsp;
+    heading : <code id="heading"></code>&nbsp;&nbsp;
+    speed : <code id="speed"></code>
+  </p>
+  <script src="./cluster.js"></script>
+  <script src="./location.js"></script>
+</body>
+
 </html>
