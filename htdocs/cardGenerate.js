@@ -1,6 +1,5 @@
 "use strict";
 
-
 function generateCard(title, input, likes) {
     let kortti = document.createElement("div");
     kortti.className = "card";
