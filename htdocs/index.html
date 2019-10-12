@@ -19,19 +19,35 @@
      
 
       <div class="cardContainer" id="cardContainer">
-
-      <div class="card">
-        <div id="vari" class="vari"></div>
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+        <div class="card">
+          <div id="vari" class="vari"></div>
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Kannata</a>          
+            <div style="display: inline; margin-left: 20px">2500 Ääntä</div>
+          </div>
         </div>
       </div>     
       </div>
       
+      <div class="cardContainer2" id="cardContainer2">
+          <div class="card" style="width: 17rem;align-self: flex-end">
+              <div class="card-header">
+                Top Kannatukset
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  Himolaskihomer 
+                  <button type="button" style="width: 54px; height: 34px; margin-left: 14px; margin-bottom: 4px" class="btn btn-outline-info">Info </button>
+                </li>
+                <li class="list-group-item">Liisa gonahti</li>
+                <li class="list-group-item">Jolacoin</li>
+              </ul>
+            </div>
+    </div>
       <div class= "locate">
-          <button id="track" style="width: 150px;height: 45px;" type="button" class="btn btn-success">Locate</button>
+          <button onclick="voted(2)" id="track" style="width: 150px;height: 45px;" type="button" class="btn btn-success">Locate</button>
         </div>
         <label>cluster distance</label>
       <input id="distance" type="range" min="0" max="100" step="1" value="40"/>

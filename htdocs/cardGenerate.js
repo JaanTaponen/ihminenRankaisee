@@ -25,14 +25,21 @@ function generateCard( longLat, id,title, input, likes) {
     voteButton.className = "btn btn-primary"
     voteButton.innerHTML = "LASKIHOMER"
 
+    voteButton.addEventListener("click", function() {
+        voteButton.className += " disabled"
+    });
+
     cardBody.appendChild(cardTitle);
     cardBody.appendChild(cardText);
     cardBody.appendChild(voteButton);
 
-
     kortti.appendChild(vari);
     kortti.appendChild(cardBody);
-
-
     document.getElementById("cardContainer").appendChild(kortti);
+
 }
+
+$(window).on("load", function(){
+    console.log("moros")
+    //generateCard("toimii", "mut ootko kattonu simpsonit sarjasta", 200);
+});
