@@ -1,4 +1,4 @@
 # ihminenRankaisee
 Ting2019
 
-'npm install && npm start'
+```npm install && npm start```
