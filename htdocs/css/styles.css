@@ -6,6 +6,13 @@ html {
 
 body {
     z-index: -1;
+    display: flex;
+    align-items: center;
+
+}
+
+.btn.btn-primary[disabled] {
+    background-color: #00ff00;
 }
 
 .map {
@@ -21,10 +28,22 @@ body {
 /*Card */
 .cardContainer {
     display: flex;
+    align-items: auto;
     margin-top: 18vh;
+    align-content: stretch;
+    width: 50%
 }
 
-.card {
+/*Card */
+.cardContainer2 {
+    margin-top: 18vh;
+    width: 50%;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cardContainer .card {
     height: 100%;
     width: 20rem;
     z-index: 10;
