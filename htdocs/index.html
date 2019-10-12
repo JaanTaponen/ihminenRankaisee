@@ -1,19 +1,28 @@
 <!doctype html>
-
 <html lang="en">
-<head>
-	<meta http-equiv="refresh" content="50">
-  <meta charset="utf-8">
-
-  <title>The HTML5 Herald</title>
-  <meta name="description" content="The HTML5 Herald">
-  <meta name="author" content="SitePoint">
-
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
-
-</head>
-
-<body>
-  moi maailma :))))))))
-</body>
+  <head>
+    <link rel="stylesheet" href="./css/ol.css" type="text/css">
+    <link rel="stylesheet" href="./css/style.css" type="text/css">
+    <script src="./scripts/ol.js"></script>
+    
+    <title>Ihminen rankaisee</title>
+  </head>
+  <body>
+    <h2>My Map</h2>
+    <div id="map" class="map"></div>
+    <script type="text/javascript">
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          })
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([37.41, 8.82]),
+          zoom: 4
+        })
+      });
+    </script>
+  </body>
 </html>
