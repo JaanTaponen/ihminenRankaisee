@@ -7,6 +7,7 @@ import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import {Cluster, OSM, Vector as VectorSource} from 'ol/source';
 import {Circle as CircleStyle, Fill, Stroke, Style, Text} from 'ol/style';
 
+/* For cluster generation */
 
 var distance = document.getElementById('distance');
 
@@ -73,3 +74,5 @@ var map = new Map({
 distance.addEventListener('input', function() {
   clusterSource.setDistance(parseInt(distance.value, 10));
 });
+
+/*CLUSTER END */
