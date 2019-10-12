@@ -11,11 +11,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="./cluster.js"></script>
     <script src="./cardGenerate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   
   </head>
   <body>      
       <div id="map" class="map"></div>
-      <script src="./location.js"></script>
+     
 
       <div class="cardContainer" id="cardContainer">
 
@@ -26,12 +27,15 @@
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
           <a href="#" class="btn btn-primary">Go somewhere</a>
         </div>
+      </div>     
       </div>
       
-      </div>
       <div class= "locate">
           <button id="track" style="width: 150px;height: 45px;" type="button" class="btn btn-success">Locate</button>
         </div>
-      
+        <label>cluster distance</label>
+      <input id="distance" type="range" min="0" max="100" step="1" value="40"/>
+        <!--<script src="./location.js"></script>-->
+        <script src="./newLocation.js"></script>
   </body>
 </html>

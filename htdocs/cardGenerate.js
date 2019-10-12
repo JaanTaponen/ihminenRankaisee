@@ -1,8 +1,9 @@
 "use strict";
 
-function generateCard(title, input, likes) {
+function generateCard( longLat, id,title, input, likes) {
     let kortti = document.createElement("div");
     kortti.className = "card";
+    kortti.id = id;
 
     let vari = document.createElement("div");
     vari.id = "vari";
@@ -35,8 +36,3 @@ function generateCard(title, input, likes) {
 
     document.getElementById("cardContainer").appendChild(kortti);
 }
-
-$(window).on("load", function(){
-    console.log("moros")
-    generateCard("neekeri", "mut ootko kattonu simpsonit sarjasta", 200);
-});
