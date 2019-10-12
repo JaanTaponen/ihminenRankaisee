@@ -78,3 +78,5 @@ var map = new Map({
 distance.addEventListener('input', function() {
   clusterSource.setDistance(parseInt(distance.value, 10));
 });
+
+/*CLUSTER END */
