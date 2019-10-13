@@ -7,7 +7,6 @@ import GeoJSON from 'ol/format/GeoJSON';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import {Cluster, OSM, Vector as VectorSource} from 'ol/source';
 import {Circle as CircleStyle, Fill, Stroke, Style, Text} from 'ol/style';
-import {fromLonLat} from 'ol/proj';
 
 var distance = document.getElementById('distance');
 
@@ -61,8 +60,7 @@ var clusters = new VectorLayer({
 var raster = new TileLayer({
   source: new OSM()
 });
-var mantsalaLocation = [25.320351,60.635681];
-const mantsala = fromLonLat(mantsalaLocation);
+
 console.log(mantsala)
 var map = new Map({
   layers: [raster, clusters],

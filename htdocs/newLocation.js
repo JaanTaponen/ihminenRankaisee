@@ -3,7 +3,6 @@ import Feature from 'ol/Feature';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import Point from 'ol/geom/Point';
-import Overlay from 'ol/Overlay';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import { Cluster, OSM, Vector as VectorSource } from 'ol/source';
 import { Circle as CircleStyle, Fill, Stroke, Style, Text } from 'ol/style';
@@ -16,7 +15,7 @@ var data =
 {
   courses: 'all'
 };
-//connect to the SQL server for getting all courses to select from
+//Get SQL data
 $.ajax({
   type: "POST",
   url: "http://localhost/sql/call.php",
@@ -27,60 +26,66 @@ $.ajax({
   dataType: 'json',
   async: false
 });
-console.log(courseList);
 
-
+//Generate Features for the map
 var count = courseList.length;
 var features = new Array(count);
 for (var i = 0; i < courseList.length; ++i) {
-  console.log(coordinates, "vittu");
   var coordinates = [parseFloat(courseList[i].Latitude),parseFloat(courseList[i].Longitude)];
   coordinates = fromLonLat(coordinates);
-  console.log(coordinates,"legit");
   features[i] = new Feature(new Point(coordinates));
   features[i].setProperties({ 'id': courseList[i].Id, 'isVisible': 'false' });
-  features[i].setProperties({'style':new Style({
-    image: new CircleStyle({
-      radius: 20,
-      stroke: new Stroke({
-        color: '#fff'
-      }),
-      fill: new Fill({
-        color: 'red'
-      })
-    }),
-    text: new Text({
-      text: "1",
-      fill: new Fill({
-        color: '#fff'
-      })
-    })
-  })});
 }
+//Bundle Features together into one source
 var source = new VectorSource({
   features: features
 });
 
+//Bind the source into a cluster
 var clusterSource = new Cluster({
   distance: parseInt(distance.value, 10),
   source: source
 });
 
+//Stylize the features and 
 var styleCache = {};
 var clusters = new VectorLayer({
   source: clusterSource,
   style: function (feature) {
+    console.log(feature);
     var size = feature.get('features').length;
     var style = styleCache[size];
-    if (!style) {
+    console.log(feature.get('features')[0].get('isVisible'));
+    if (feature.get('features')[0].get('isVisible') == 'false') {
       style = new Style({
         image: new CircleStyle({
           radius: 10,
           stroke: new Stroke({
-            color: '#fff'
+            color: 'white'
           }),
           fill: new Fill({
-            color: '#3399CC'
+            color: 'red'
+          })
+        }),
+        text: new Text({
+          text: size.toString(),
+          fill: new Fill({
+            color: '#fff'
+          })
+        })
+      });
+      styleCache[size] = style;
+    }
+    else
+    {
+      style = new Style({
+        image: new CircleStyle({
+          radius: 20,
+          stroke: new Stroke({
+            color: 'black'
+          }),
+          fill: new Fill({
+            color: 'green'
           })
         }),
         text: new Text({
@@ -99,14 +104,17 @@ var clusters = new VectorLayer({
 var raster = new TileLayer({
   source: new OSM()
 });
+var mantsalaLocation = [25.320351, 60.635681];
+const mantsala = fromLonLat(mantsalaLocation);
 
+var view =  new View({
+  center:mantsala,
+  zoom: 7
+})
 var map = new Map({
   layers: [raster, clusters],
   target: 'map',
-  view: new View({
-    center: [0, 0],
-    zoom: 2
-  })
+  view: view
 });
 
 
@@ -125,16 +133,20 @@ map.on('moveend',function(e){
   newSideCard.className = "card";
   newSideCard.appendChild(sideCardHeader);
   sideCard.appendChild(newSideCard);
+  var sideCardUL = document.createElement("ul");
+  sideCardUL.className = "list-group list-group-flush";
   array.forEachFeatureInExtent(extent, function (feature, layer) {
 
 
-    var sideCardUL = document.createElement("ul");
-    sideCardUL.className = "list-group list-group-flush";
+
   
-    function addChild(id)
+    function addChild(id,feature)
     {
+      var givenFeature = feature;
+      console.log(givenFeature);
       var newListItem = document.createElement("li");
       newListItem.className = "list-group-item";
+      newListItem.style.cursor = "pointer"; 
       var mySQLItem = '';
       // refactoroi paska
       for(var i = 0; i < courseList.length; i++)
@@ -145,7 +157,35 @@ map.on('moveend',function(e){
           break;
         }
       }
+      newListItem.addEventListener('mouseenter',function()
+      {
+        newListItem.className = "list-group-item list-group-item-secondary";
+      });
+      newListItem.addEventListener('mouseleave',function()
+      {
+        newListItem.className = "list-group-item";
+      });
+      newListItem.addEventListener('click',function()
+      {
+        var leftSideCard = document.getElementById("cardContainer");
+        leftSideCard.className = "cardContainer2";
+        var leftSideCardTitle = document.getElementById("cardContainerTitle");
+        leftSideCardTitle.innerHTML = mySQLItem.Nimi;
+        var leftSideCardText = document.getElementById("cardContainerText");
+        leftSideCardText.innerHTML = mySQLItem.Kuvaus;
+        console.log(feature);
+        feature.setProperties({'isVisible':'true'});
+        var longitude = mySQLItem.Longitude;
+        var latitude = mySQLItem.Latitude;
+        var coordinates = [parseFloat(latitude),parseFloat(longitude)];
+        coordinates = fromLonLat(coordinates);
+        view.animate({
+          center: coordinates,
+          zoom: 12,
+          duration: 500
+        });
 
+      });
       newListItem.innerHTML = mySQLItem.Nimi;
       return newListItem;
     }
@@ -161,11 +201,12 @@ map.on('moveend',function(e){
       for(var i = 0; i < features.length; i++) {
         // here you'll have access to your normal attributes:
         console.log(features[i].get('id'));
-        sideCardUL.appendChild(addChild(features[i].get('id')));
+        console.log(features[i]);
+        sideCardUL.appendChild(addChild(features[i].get('id'),features[i]));
       }
     } else {
       // not a cluster
-      sideCardUL.appendChild(addChild(feature.get('features')[0].get('id')));
+      sideCardUL.appendChild(addChild(feature.get('features')[0].get('id'),feature.get('features')[0]));
     }
     newSideCard.appendChild(sideCardUL);
     
@@ -190,27 +231,10 @@ map.getViewport().addEventListener("click", function (e) {
       }
     } else {
       var singleFeature =feature.get('features')[0];
-      console.log(singleFeature);
-      
-      singleFeature.set('style', new Style({
-        image: new CircleStyle({
-          radius: 20,
-          stroke: new Stroke({
-            color: '#fff'
-          }),
-          fill: new Fill({
-            color: 'red'
-          })
-        }),
-        text: new Text({
-          text: "1",
-          fill: new Fill({
-            color: '#fff'
-          })
-        })
-      }));
-      map.render();
-      console.log(singleFeature.get('style'));
+      singleFeature.get('isVisible') == 'false' ? 
+      singleFeature.setProperties({'isVisible':'true'}) :
+      singleFeature.setProperties({'isVisible':'false'});
+      console.log(singleFeature.get('isVisible'));
       var featureID = singleFeature.get('id');
       var mySQLItem = '';
       for(var i = 0; i < courseList.length; i++)
