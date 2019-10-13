@@ -3,6 +3,7 @@ import Feature from 'ol/Feature';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import Point from 'ol/geom/Point';
+import Overlay from 'ol/Overlay';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import { Cluster, OSM, Vector as VectorSource } from 'ol/source';
 import { Circle as CircleStyle, Fill, Stroke, Style, Text } from 'ol/style';
@@ -38,8 +39,24 @@ for (var i = 0; i < courseList.length; ++i) {
   console.log(coordinates,"legit");
   features[i] = new Feature(new Point(coordinates));
   features[i].setProperties({ 'id': courseList[i].Id, 'isVisible': 'false' });
+  features[i].setProperties({'style':new Style({
+    image: new CircleStyle({
+      radius: 20,
+      stroke: new Stroke({
+        color: '#fff'
+      }),
+      fill: new Fill({
+        color: 'red'
+      })
+    }),
+    text: new Text({
+      text: "1",
+      fill: new Fill({
+        color: '#fff'
+      })
+    })
+  })});
 }
-console.log("veli ooks terve")
 var source = new VectorSource({
   features: features
 });
@@ -92,15 +109,46 @@ var map = new Map({
   })
 });
 
+
 map.on('moveend',function(e){
   var array = map.getLayers().getArray()[1].getLayersArray()[0].getSource();
-  //var feature = array.get('features');
   console.log(array);
   var extent = map.getView().calculateExtent(map.getSize());
-  console.log(extent);
-  
+  var sideCard = document.getElementById("cardContainer2");
+  while (sideCard.firstChild) {
+    sideCard.removeChild(sideCard.firstChild);
+  }
+  var sideCardHeader = document.createElement("div");
+  sideCardHeader.className = "card-header";
+  sideCardHeader.innerHTML = "Top Kannatukset";
+  var newSideCard = document.createElement("div");
+  newSideCard.className = "card";
+  newSideCard.appendChild(sideCardHeader);
+  sideCard.appendChild(newSideCard);
   array.forEachFeatureInExtent(extent, function (feature, layer) {
-    console.log("asdsad")
+
+
+    var sideCardUL = document.createElement("ul");
+    sideCardUL.className = "list-group list-group-flush";
+  
+    function addChild(id)
+    {
+      var newListItem = document.createElement("li");
+      newListItem.className = "list-group-item";
+      var mySQLItem = '';
+      // refactoroi paska
+      for(var i = 0; i < courseList.length; i++)
+      {
+        if(courseList[i].Id == id)
+        {
+          mySQLItem = courseList[i];
+          break;
+        }
+      }
+
+      newListItem.innerHTML = mySQLItem.Nimi;
+      return newListItem;
+    }
     function isCluster(feature) {
       if (!feature || !feature.get('features')) { 
             return false; 
@@ -113,11 +161,13 @@ map.on('moveend',function(e){
       for(var i = 0; i < features.length; i++) {
         // here you'll have access to your normal attributes:
         console.log(features[i].get('id'));
+        sideCardUL.appendChild(addChild(features[i].get('id')));
       }
     } else {
       // not a cluster
-      console.log(feature.get('features')[0].get('id'));
+      sideCardUL.appendChild(addChild(feature.get('features')[0].get('id')));
     }
+    newSideCard.appendChild(sideCardUL);
     
   });
 });
@@ -139,8 +189,50 @@ map.getViewport().addEventListener("click", function (e) {
         console.log(features[i].get('id'));
       }
     } else {
-      // not a cluster
-      console.log(feature.get('features')[0].get('id'));
+      var singleFeature =feature.get('features')[0];
+      console.log(singleFeature);
+      
+      singleFeature.set('style', new Style({
+        image: new CircleStyle({
+          radius: 20,
+          stroke: new Stroke({
+            color: '#fff'
+          }),
+          fill: new Fill({
+            color: 'red'
+          })
+        }),
+        text: new Text({
+          text: "1",
+          fill: new Fill({
+            color: '#fff'
+          })
+        })
+      }));
+      map.render();
+      console.log(singleFeature.get('style'));
+      var featureID = singleFeature.get('id');
+      var mySQLItem = '';
+      for(var i = 0; i < courseList.length; i++)
+      {
+        if(courseList[i].Id == featureID)
+        {
+          mySQLItem = courseList[i];
+          break;
+        }
+      }
+      var leftSideCard = document.getElementById("cardContainer");
+      var leftSideCardTitle = document.getElementById("cardContainerTitle");
+      if(leftSideCardTitle.innerHTML == mySQLItem.Nimi)
+      {
+      leftSideCard.className == 'invisible' 
+      ? leftSideCard.className = 'cardContainer2' 
+      : leftSideCard.className = 'invisible';
+      }
+      leftSideCardTitle.innerHTML = mySQLItem.Nimi;
+      var leftSideCardText = document.getElementById("cardContainerText");
+      leftSideCardText.innerHTML = mySQLItem.Kuvaus;
+
     }
   });
 });

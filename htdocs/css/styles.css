@@ -10,6 +10,10 @@ body {
     align-items: center;
 
 }
+.invisible 
+{
+    display: none;
+}
 
 .btn.btn-primary[disabled] {
     background-color: #00ff00;
@@ -42,7 +46,18 @@ body {
     display: flex;
     flex-direction: column;
 }
-
+.cardContainer2 .buttonInfo
+{
+    width: 54px; 
+    height: 34px; 
+    margin-left: 14px; 
+    margin-bottom: 4px;
+}
+.cardContainer2 .card 
+{
+    width: 17rem;
+    align-self: flex-end;
+}
 .cardContainer .card {
     height: 100%;
     width: 20rem;
