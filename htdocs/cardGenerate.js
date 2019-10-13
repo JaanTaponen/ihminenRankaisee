@@ -40,6 +40,5 @@ function generateCard( longLat, id,title, input, likes) {
 }
 
 $(window).on("load", function(){
-    console.log("moros")
     //generateCard("toimii", "mut ootko kattonu simpsonit sarjasta", 200);
 });

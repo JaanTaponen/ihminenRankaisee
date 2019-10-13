@@ -52,10 +52,8 @@ var styleCache = {};
 var clusters = new VectorLayer({
   source: clusterSource,
   style: function (feature) {
-    console.log(feature);
     var size = feature.get('features').length;
     var style = styleCache[size];
-    console.log(feature.get('features')[0].get('isVisible'));
     if (feature.get('features')[0].get('isVisible') == 'false') {
       style = new Style({
         image: new CircleStyle({
@@ -120,15 +118,21 @@ var map = new Map({
 
 map.on('moveend',function(e){
   var array = map.getLayers().getArray()[1].getLayersArray()[0].getSource();
-  console.log(array);
   var extent = map.getView().calculateExtent(map.getSize());
   var sideCard = document.getElementById("cardContainer2");
   while (sideCard.firstChild) {
     sideCard.removeChild(sideCard.firstChild);
   }
+  
   var sideCardHeader = document.createElement("div");
   sideCardHeader.className = "card-header";
   sideCardHeader.innerHTML = "Top Kannatukset";
+
+  /*MAHDOLLINEN IKONI*/
+  var ikoni = document.createElement("i");
+  ikoni.className = "fa-li fa fa-check-square"
+  sideCardHeader.appendChild(ikoni);
+
   var newSideCard = document.createElement("div");
   newSideCard.className = "card";
   newSideCard.appendChild(sideCardHeader);
@@ -136,16 +140,11 @@ map.on('moveend',function(e){
   var sideCardUL = document.createElement("ul");
   sideCardUL.className = "list-group list-group-flush";
   array.forEachFeatureInExtent(extent, function (feature, layer) {
-
-
-
   
     function addChild(id,feature)
     {
-      var givenFeature = feature;
-      console.log(givenFeature);
       var newListItem = document.createElement("li");
-      newListItem.className = "list-group-item";
+      newListItem.className = "list-group-item d-flex justify-content-between align-items-center";
       newListItem.style.cursor = "pointer"; 
       var mySQLItem = '';
       // refactoroi paska
@@ -163,16 +162,19 @@ map.on('moveend',function(e){
       });
       newListItem.addEventListener('mouseleave',function()
       {
-        newListItem.className = "list-group-item";
+        newListItem.className = "list-group-item d-flex justify-content-between align-items-center";
       });
       newListItem.addEventListener('click',function()
       {
         var leftSideCard = document.getElementById("cardContainer");
-        leftSideCard.className = "cardContainer2";
+        leftSideCard.className = "cardContainer";
         var leftSideCardTitle = document.getElementById("cardContainerTitle");
         leftSideCardTitle.innerHTML = mySQLItem.Nimi;
         var leftSideCardText = document.getElementById("cardContainerText");
         leftSideCardText.innerHTML = mySQLItem.Kuvaus;
+
+        var leftSideCardVoteAmount = document.getElementById("cardContainerVotes");
+        leftSideCardVoteAmount.innerHTML = mySQLItem.Votes + " Ääntä";
         console.log(feature);
         feature.setProperties({'isVisible':'true'});
         var longitude = mySQLItem.Longitude;
@@ -186,7 +188,13 @@ map.on('moveend',function(e){
         });
 
       });
+
       newListItem.innerHTML = mySQLItem.Nimi;
+      //RAISE COUNTER
+      var counteri = document.createElement("span");
+      counteri.className = "badge badge-primary badge-pill";
+      counteri.innerHTML = mySQLItem.Votes;
+      newListItem.appendChild(counteri);
       return newListItem;
     }
     function isCluster(feature) {
@@ -200,13 +208,17 @@ map.on('moveend',function(e){
       var features = feature.get('features');
       for(var i = 0; i < features.length; i++) {
         // here you'll have access to your normal attributes:
-        console.log(features[i].get('id'));
-        console.log(features[i]);
-        sideCardUL.appendChild(addChild(features[i].get('id'),features[i]));
+        if (sideCardUL.childElementCount < 4) {
+          sideCardUL.appendChild(addChild(features[i].get('id'),features[i]));
+        } 
+        
       }
     } else {
       // not a cluster
-      sideCardUL.appendChild(addChild(feature.get('features')[0].get('id'),feature.get('features')[0]));
+      if (sideCardUL.childElementCount < 4) {
+        sideCardUL.appendChild(addChild(feature.get('features')[0].get('id'),feature.get('features')[0]));
+      }
+      
     }
     newSideCard.appendChild(sideCardUL);
     
@@ -230,6 +242,7 @@ map.getViewport().addEventListener("click", function (e) {
         console.log(features[i].get('id'));
       }
     } else {
+      console.log("pitäis pingaa")
       var singleFeature =feature.get('features')[0];
       singleFeature.get('isVisible') == 'false' ? 
       singleFeature.setProperties({'isVisible':'true'}) :
@@ -247,19 +260,31 @@ map.getViewport().addEventListener("click", function (e) {
       }
       var leftSideCard = document.getElementById("cardContainer");
       var leftSideCardTitle = document.getElementById("cardContainerTitle");
-      if(leftSideCardTitle.innerHTML == mySQLItem.Nimi)
+      if(leftSideCardTitle.innerHTML == mySQLItem.Nimi && leftSideCard.className== 'cardContainer')
       {
-      leftSideCard.className == 'invisible' 
-      ? leftSideCard.className = 'cardContainer2' 
-      : leftSideCard.className = 'invisible';
+      leftSideCard.className = 'invisible' 
+      }
+      else
+      {
+        leftSideCard.className = 'cardContainer'
       }
       leftSideCardTitle.innerHTML = mySQLItem.Nimi;
       var leftSideCardText = document.getElementById("cardContainerText");
       leftSideCardText.innerHTML = mySQLItem.Kuvaus;
-
+      var leftSideCardVoteAmount = document.getElementById("cardContainerVotes");
+      leftSideCardVoteAmount.innerHTML = mySQLItem.Votes + " Ääntä";
     }
   });
 });
+document.getElementById("track").addEventListener('click',function()
+{
+  view.animate({
+    center: mantsala,
+    zoom: 13,
+    duration: 500
+  });
+})
+
 distance.addEventListener('input', function () {
   clusterSource.setDistance(parseInt(distance.value, 10));
 });

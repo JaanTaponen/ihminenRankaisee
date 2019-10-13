@@ -1,3 +1,5 @@
+
+
 html {
     height: 100%;
     width: 100%;
@@ -8,11 +10,16 @@ body {
     z-index: -1;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    align-items: baseline;
+    margin: 0 1em 0 0;
 
 }
-.invisible 
+
+.cardContainer.invisible 
 {
-    display: none;
+    visibility: none;
+    
 }
 
 .btn.btn-primary[disabled] {
@@ -32,19 +39,33 @@ body {
 /*Card */
 .cardContainer {
     display: flex;
-    align-items: auto;
-    margin-top: 18vh;
-    align-content: stretch;
-    width: 50%
+    margin-top: 14vh;
+    flex-direction: row;
+    width: 50%;
+
+    transition-property: all;
+	transition-duration: .5s;
+	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.cardContainer .card {
+    height: 100%;
+    width: 20rem;
+    z-index: 10;
+    margin-left: 5px;
+    align-self: flex-start;
 }
 
 /*Card */
 .cardContainer2 {
-    margin-top: 18vh;
+    margin-top: 3vh;
     width: 50%;
-    margin-right: 10px;
+    margin-right: 5px;
     display: flex;
     flex-direction: column;
+    align-self: flex-start;
+    justify-content: center;
+    align-items: center;;
 }
 .cardContainer2 .buttonInfo
 {
@@ -57,18 +78,34 @@ body {
 {
     width: 17rem;
     align-self: flex-end;
+    
+    max-width: 17rem;; /* approximate max height */
+    overflow-y: hidden;
+    overflow-x: hidden;
+    transition-property: all;
+	transition-duration: .5s;
+	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
-.cardContainer .card {
-    height: 100%;
-    width: 20rem;
-    z-index: 10;
-    margin-left: 15px;
+
+.cardContainer2 .card.closed {
+    max-width: 0;
 }
 
 .card .vari {
     color: #5656a2;
     background: #5656a2; height: 200px;
 }
+
+.card .vari.punainen {
+    color: #800000;
+    background: #800000; height: 200px;
+}
+
+.card .vari.vihrea {
+    color: #228B22;
+    background: #228B22; height: 200px;
+}
+
 
 /*end of card*/
 .locate {
